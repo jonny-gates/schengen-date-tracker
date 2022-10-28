@@ -1,9 +1,10 @@
-import dayjs, { Dayjs } from "dayjs";
+import dayjs from "dayjs";
 import { usePopupMenu } from "../../../contexts/PopupMenuContext";
+import { formatDateKey, formatDayInMonth } from "../../../utilities/formatDate";
 
 export type Day = {
   tripId?: string | undefined;
-  date?: Dayjs;
+  date: string;
   isCurrentMonth?: Boolean | undefined;
   isToday?: Boolean | undefined;
   isStartOfLastWeek?: Boolean;
@@ -35,8 +36,6 @@ export default function Day({ day }: DayProps) {
     if (day.isInEU) return "font-semibold text-white bg-blue-500";
   };
 
-  const formatDate = (date: string) => dayjs(date).format("DD");
-
   const handleClick = () => {
     const currentDay = dayjs(day.date);
     day.tripId
@@ -44,9 +43,12 @@ export default function Day({ day }: DayProps) {
       : openNewTripMenu(currentDay);
   };
 
+  const dateKey = formatDateKey(day.date);
+  const dayDate = formatDayInMonth(day.date);
+
   return (
     <button
-      key={day.date}
+      key={dateKey}
       type="button"
       className={classNames(
         day.isCurrentMonth
@@ -61,13 +63,13 @@ export default function Day({ day }: DayProps) {
       onClick={handleClick}
     >
       <time
-        dateTime={day.date}
+        dateTime={dateKey}
         className={classNames(
           dayColor(),
           "mx-auto flex h-7 w-7 items-center justify-center rounded-full"
         )}
       >
-        {formatDate(day.date)}
+        {dayDate}
       </time>
     </button>
   );

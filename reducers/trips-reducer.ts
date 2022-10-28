@@ -1,11 +1,9 @@
-import { Dayjs } from "dayjs";
 import { v4 as uuidv4 } from "uuid";
 import { FormValues as TripFormValues } from "../components/trips/form";
-import parseDates from "../utilities/parseTripDates";
 
 export type Trip = {
-  startDate: Dayjs;
-  endDate: Dayjs;
+  startDate: string;
+  endDate: string;
   country: string;
   id: string;
 };
@@ -31,7 +29,7 @@ export default function tripsReducer(
       return {
         byId: {
           ...state.byId,
-          [id]: { ...parseDates(data), id },
+          [id]: { ...data, id },
         },
         allIds: [...state.allIds, id],
       };
@@ -43,7 +41,7 @@ export default function tripsReducer(
       return {
         byId: {
           ...state.byId,
-          [id]: { ...trip, ...parseDates(data) },
+          [id]: { ...trip, ...data },
         },
         allIds: state.allIds,
       };

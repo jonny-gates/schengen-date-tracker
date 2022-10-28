@@ -5,7 +5,7 @@ import { useTrips } from "../../contexts/TripsContext";
 import useDaysInEU from "../../hooks/useDaysInEU";
 
 type Year = {
-  name: string;
+  name: string | number;
   months: Month[];
 };
 

@@ -17,10 +17,10 @@ export default function ControlBar({
   currentYearIndex,
   increaseYear,
 }: ControlBarProps) {
-  const { open } = usePopupMenu();
+  const { openNewTripMenu } = usePopupMenu();
 
   const handleOpenMenu = () => {
-    open();
+    openNewTripMenu();
   };
 
   return (
