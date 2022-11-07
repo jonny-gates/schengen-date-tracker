@@ -3,6 +3,7 @@ import Day from "./day";
 import dayjs from "dayjs";
 import { useTrips } from "../../contexts/TripsContext";
 import useDaysInEU from "../../hooks/useDaysInEU";
+import useIsToday from "../../hooks/useIsToday";
 
 type Year = {
   name: string | number;
@@ -25,6 +26,9 @@ export interface CalendarProps {
 export default function Calendar({ year }: CalendarProps) {
   const { trips } = useTrips();
   const { daysInEU, overages } = useDaysInEU(trips);
+  const isToday = useIsToday();
+
+  console.log("Current day: ", dayjs().format());
 
   const renderDays = (days: any[]) => {
     const isStartOfLastWeek = (index: number) => index === days.length - 7;
@@ -33,17 +37,27 @@ export default function Calendar({ year }: CalendarProps) {
     const isEndOfFirstWeek = (index: number) => index === 6;
 
     return days.map((day: any, dayIdx: number) => {
+      console.log(isToday(day.date));
+
+      const lookupKey = dayjs(day.date).format();
+
       const data = {
         ...day,
         isStartOfLastWeek: isStartOfLastWeek(dayIdx),
         isStartOfMonth: isStartOfMonth(dayIdx),
         isEndOfFirstWeek: isEndOfFirstWeek(dayIdx),
         isEndOfMonth: isEndOfMonth(dayIdx),
-        isToday: dayjs().isSame(dayjs(day.date), "day"),
-        isInEU: !!daysInEU[dayjs(day.date).format()],
-        isOverage: overages[dayjs(day.date).format()],
-        tripId: daysInEU[dayjs(day.date).format()],
+        isToday: isToday(day.date),
+        isInEU: !!daysInEU[lookupKey],
+        isOverage: overages[lookupKey],
+        tripId: daysInEU[lookupKey],
       };
+
+      if (data.isToday) {
+        // console.log("Formula result: ", today.isSame(dayjs(day.date), "day"));
+        // console.log("Day: ", today.format());
+        // console.log("Compare Day: ", dayjs(day.date).format());
+      }
 
       return <Day day={data} key={dayIdx} />;
     });
