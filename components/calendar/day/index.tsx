@@ -26,12 +26,17 @@ function classNames(...classes: any) {
 export default function Day({ day }: DayProps) {
   const { openEditTripMenu, openNewTripMenu } = usePopupMenu();
 
+  const isToday = () => {
+    const today = dayjs();
+    return dayjs(day.date).isSame(today, "day");
+  };
+
   const dayColor = () => {
     if (!day.isCurrentMonth) {
-      if (day.isToday || day.isInEU || day.isOverage)
+      if (isToday() || day.isInEU || day.isOverage)
         return "font-semibold text-white bg-gray-200";
     }
-    if (day.isToday) return "font-semibold text-white bg-indigo-600";
+    if (isToday()) return "font-semibold text-white bg-indigo-600";
     if (day.isOverage) return "font-semibold text-white bg-red-700";
     if (day.isInEU) return "font-semibold text-white bg-blue-500";
   };
